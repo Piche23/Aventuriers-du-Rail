@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
 def init_database():
     """
     Initialise la base de données en supprimant toutes les tables existantes,
@@ -16,7 +17,7 @@ def init_database():
 # Fonction pour peupler la base de données
 def populate_database():
     # Import des modèles de la base de données
-    from models import Joueur,Plateau, Partie, Score
+    from models import Joueur, Plateau, Partie, Score
 
     # Ajout des joueurs
     Joueur.ajouter_joueur("Hugo")
@@ -27,10 +28,18 @@ def populate_database():
 
     # Ajout des plateaux
     Plateau.ajouter_plateau("Europe")
+    Plateau.ajouter_plateau("Big Cities")
+    Plateau.ajouter_plateau("Asie")
+    Plateau.ajouter_plateau("Legendary Asia")
     Plateau.ajouter_plateau("Afrique")
-    Plateau.ajouter_plateau("Pays-Bas")
     Plateau.ajouter_plateau("Suisse")
+    Plateau.ajouter_plateau("Inde")
+    Plateau.ajouter_plateau("Pays-Bas")
+    Plateau.ajouter_plateau("Royaume-Uni")
+    Plateau.ajouter_plateau("Pennsylvanie")
+    Plateau.ajouter_plateau("France")
+    Plateau.ajouter_plateau("Old West")
+    Plateau.ajouter_plateau("Japon")
+    Plateau.ajouter_plateau("Italie")
 
     # Ajout des parties
-
-
