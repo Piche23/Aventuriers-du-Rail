@@ -32,6 +32,25 @@ class Plateau(db.Model):
     pla_id = db.Column(db.Integer, primary_key=True)
     pla_nom = db.Column(db.Text, nullable=False)
 
+    def ajouter_plateau(nom: str):
+        new_plateau = Plateau()
+        new_plateau.pla_nom = nom
+        db.session.add(new_plateau)
+        db.session.commit()
+
+    def get_plateau_par_nom(nom: str):
+        return db.session.query(Plateau).filter(Plateau.pla_nom == nom).first()
+
+    def get_by_id(id: int):
+        return db.session.query(Plateau).filter(Plateau.pla_id == id).first()
+
+    def get_all_plateau():
+        return db.session.query(Plateau).all()
+
+    def modifier_plateau(self, nom="null"):
+        if nom != "null" and nom != '':
+            self.pla_nom = nom
+
 
 class Partie(db.Model):
     __tablename__ = "Partie"
