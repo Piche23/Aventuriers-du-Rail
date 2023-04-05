@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from database.database import db
 
 
@@ -55,6 +57,7 @@ class Plateau(db.Model):
 class Partie(db.Model):
     __tablename__ = "Partie"
     par_id = db.Column(db.Integer, primary_key=True)
+    par_plateau = db.Column(db.Integer, db.ForeignKey('Plateau.pla_id'))
     par_joueur1 = db.Column(db.Integer, db.ForeignKey('Joueur.jou_id'))
     par_joueur2 = db.Column(db.Integer, db.ForeignKey('Joueur.jou_id'))
     par_joueur3 = db.Column(db.Integer, db.ForeignKey('Joueur.jou_id'))
@@ -63,11 +66,56 @@ class Partie(db.Model):
     par_joueur6 = db.Column(db.Integer, db.ForeignKey('Joueur.jou_id'))
     par_score_joueur1 = db.Column(db.Integer, nullable=False)
     par_score_joueur2 = db.Column(db.Integer, nullable=False)
-    par_score_joueur3 = db.Column(db.Integer, nullable=False)
-    par_score_joueur4 = db.Column(db.Integer, nullable=False)
-    par_score_joueur5 = db.Column(db.Integer, nullable=False)
-    par_score_joueur6 = db.Column(db.Integer, nullable=False)
+    par_score_joueur3 = db.Column(db.Integer)
+    par_score_joueur4 = db.Column(db.Integer)
+    par_score_joueur5 = db.Column(db.Integer)
+    par_score_joueur6 = db.Column(db.Integer)
     par_date = db.Column(db.DateTime)
+
+    def ajouter_partie(plateau: int, joueur1: int, joueur2: int, score_joueur1: int,
+                       score_joueur2: int, date: str, joueur3="null", joueur4="null",
+                       joueur5="null", joueur6="null", score_joueur3="null",
+                       score_joueur4="null", score_joueur5="null", score_joueur6="null"):
+        Date = datetime.strptime(date, '%Y-%m-%d')
+        new_partie = Partie(par_plateau=plateau, par_joueur1=joueur1, par_joueur2=joueur2,
+                            par_joueur3=joueur3, par_joueur4=joueur4, par_joueur5=joueur5,
+                            par_joueur6=joueur6, par_score_joueur1=score_joueur1,
+                            par_score_joueur2=score_joueur2, par_score_joueur3=score_joueur3,
+                            par_score_joueur4=score_joueur4, par_score_joueur5=score_joueur5,
+                            par_score_joueur6=score_joueur6, par_date=Date)
+        db.session.add(new_partie)
+        db.session.commit()
+
+    def get_by_id(id: int):
+        return db.session.query(Partie).filter(Partie.par_id == id).first()
+
+    def get_all_partie():
+        return db.session.query(Partie).all()
+
+    def modifier_partie(self, plateau, joueur1, joueur2, score_joueur1, score_joueur2, date,
+                        joueur3, joueur4, joueur5, joueur6, score_joueur3, score_joueur4,
+                        score_joueur5, score_joueur6):
+        if plateau != "null" and plateau != '':
+            self.par_plateau = plateau
+        if joueur1 != "null" and joueur1 != '':
+            self.par_joueur1 = joueur1
+        if joueur2 != "null" and joueur2 != '':
+            self.par_joueur2 = joueur2
+        self.par_joueur3 = joueur3
+        self.par_joueur4 = joueur4
+        self.par_joueur5 = joueur5
+        self.par_joueur6 = joueur6
+        if score_joueur1 != "null" and score_joueur1 != '':
+            self.par_score_joueur1 = score_joueur1
+        if score_joueur2 != "null" and score_joueur2 != '':
+            self.par_score_joueur2 = score_joueur2
+        self.par_score_joueur3 = score_joueur3
+        self.par_score_joueur4 = score_joueur4
+        self.par_score_joueur5 = score_joueur5
+        self.par_score_joueur6 = score_joueur6
+        if date != "null" and date != '':
+            Date = datetime.strptime(date, '%Y-%m-%d')
+            self.par_date = Date
 
 
 class Score(db.Model):
