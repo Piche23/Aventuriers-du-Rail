@@ -72,10 +72,9 @@ class Partie(db.Model):
     par_score_joueur6 = db.Column(db.Integer)
     par_date = db.Column(db.DateTime)
 
-    def ajouter_partie(plateau: int, joueur1: int, joueur2: int, score_joueur1: int,
-                       score_joueur2: int, date: str, joueur3="null", joueur4="null",
-                       joueur5="null", joueur6="null", score_joueur3="null",
-                       score_joueur4="null", score_joueur5="null", score_joueur6="null"):
+    def ajouter_partie(plateau, joueur1, joueur2, joueur3, joueur4, joueur5, joueur6,
+                       score_joueur1, score_joueur2, score_joueur3, score_joueur4,
+                       score_joueur5, score_joueur6, date):
         Date = datetime.strptime(date, '%Y-%m-%d')
         new_partie = Partie(par_plateau=plateau, par_joueur1=joueur1, par_joueur2=joueur2,
                             par_joueur3=joueur3, par_joueur4=joueur4, par_joueur5=joueur5,
@@ -124,3 +123,22 @@ class Score(db.Model):
     sco_plateau = db.Column(db.Integer, db.ForeignKey('Plateau.pla_id'))
     sco_joueur = db.Column(db.Integer, db.ForeignKey('Joueur.jou_id'))
     sco_score = db.Column(db.Integer, nullable=False)
+
+    def ajouter_score(plateau, joueur, score):
+        new_score = Score(par_plateau=plateau, sco_joueur=joueur, sco_score=score)
+        db.session.add(new_score)
+        db.session.commit()
+
+    def get_by_id(id: int):
+        return db.session.query(Score).filter(Score.sco_id == id).first()
+
+    def get_all_score():
+        return db.session.query(Score).all()
+
+    def modifier_score(self, plateau, joueur, score):
+        if plateau != "null" and plateau != '':
+            self.sco_plateau = plateau
+        if joueur != "null" and joueur != '':
+            self.sco_joueur = joueur
+        if score != "null" and score != '':
+            self.sco_score = score
